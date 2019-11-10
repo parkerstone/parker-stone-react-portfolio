@@ -27,13 +27,16 @@ export default class Login extends Component {
         ).then(response => {
             if (response.data.status === 'created') {
                 console.log("you can come in...")
+                this.props.handleSuccessfulAuth()
             } else {
                 this.setState({
                     errorText: "Wrong email or password"
                 })
+                this.props.handleUnsuccessfulAuth()
             }
         }).catch(error => {
             this.setState({errorText: "Could not connect to devcamp.space"})
+            this.props.handleUnsuccessfulAuth()
         });
 
         event.preventDefault();
@@ -72,7 +75,7 @@ export default class Login extends Component {
               />
 
               <div>
-                  <button type="submit">Button</button>
+                  <button type="submit">Login</button>
               </div>
           </form>
         <h1>Form should go here</h1>
