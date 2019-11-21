@@ -37,7 +37,7 @@ const BlogDetail = props => {
         <div className="content-container">
           <h1 onClick={handleEditClick}>{title}</h1>
 
-        <BlogFeaturedImage img={featured_image_url} />
+            <BlogFeaturedImage img={featured_image_url} />
 
           <div className="content">{ReactHtmlParser(content)}</div>
         </div>

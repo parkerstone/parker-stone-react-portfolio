@@ -3,6 +3,7 @@ import axios from 'axios'
 import { DropzoneComponent as Dropzone } from 'react-dropzone-component'
 
 import RichTextEditor from '../forms/rich-text-editor'
+import DropzoneImage from '../forms/dropzone-image'
 
 const BlogForm = props => {
   const [formInfo, setFormInfo] = useState({
@@ -19,7 +20,8 @@ const BlogForm = props => {
         ...data,
         id: props.blogItem.id,
         title: props.blogItem.title,
-        blog_status: props.blogItem.blog_status
+        blog_status: props.blogItem.blog_status,
+        featured_image_url: props.blogItem.featured_image_url
       }))
     }
   }, [])
@@ -39,28 +41,18 @@ const BlogForm = props => {
     }))
   }
 
-  const componentConfig = () => {
-    return {
-      iconFiletypes: [".jpg", ".png"],
-      showFiletypeIcon: true,
-      postUrl: "https://httpbin.org/post"
-    }
+  const imgStateUpdate = (file) => {
+    setFormInfo(data => ({
+      ...data,
+      featured_image: file
+    }))
   }
 
-  const djsConfig = () => {
-    return {
-      addRemoveLinks: true,
-      maxFiles: 1
-    }
-  }
-
-  const handleFeaturedImageDrop = () => {
-    return {
-      addedfile: file => setFormInfo(data => ({
-        ...data,
-        featured_image: file
-      }))
-    }
+  const urlStateUpdate = () => {
+    setFormInfo(data => ({
+      ...data,
+      featured_image_url: ""
+    }))
   }
 
   const buildForm = () => {
@@ -130,14 +122,25 @@ const BlogForm = props => {
       </div>
 
       <div className='image-uploaders'>
-        <Dropzone
+        <DropzoneImage
+            imgStateUpdate={imgStateUpdate}
+            urlStateUpdate={urlStateUpdate}
+            component={"blog"}
+            id={formInfo.id}
+            imageType={"featured"}
+            imageUrl={formInfo.featured_image_url}
+            editMode={props.editMode}
+            ref={featuredImageRef}
+            message={"Featured Image"}
+          />
+        {/* <Dropzone
           ref={featuredImageRef}
           config={componentConfig()}
           djsConfig={djsConfig()}
           eventHandlers={handleFeaturedImageDrop()}
         >
           <div className="dz-message">Featured Image</div>
-        </Dropzone>
+        </Dropzone> */}
       </div>
 
       <button className="btn">Save</button>
