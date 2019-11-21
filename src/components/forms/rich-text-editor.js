@@ -25,7 +25,7 @@ const RichTextEditor = props => {
       const editorState = EditorState.createWithContent(contentState)
       setEditorState(editorState)
     }
-  })
+  }, [])
 
   const getBase64 = (file, callback) => {
     let reader = new FileReader()

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { DropzoneComponent as Dropzone } from 'react-dropzone-component'
 
 import RichTextEditor from '../forms/rich-text-editor'
 import DropzoneImage from '../forms/dropzone-image'
@@ -11,17 +10,23 @@ const BlogForm = props => {
     title: "",
     blog_status: "",
     content: "",
-    featured_image: ""
+    featured_image: "",
+    apiUrl: "https://parkerstone.devcamp.space/portfolio/portfolio_blogs",
+    apiAction: "post"
   })
 
   useEffect(() => {
     if (props.editMode) {
+      const {id, title, blog_status, featured_image_url, content} = props.blogItem
       setFormInfo(data => ({
         ...data,
-        id: props.blogItem.id,
-        title: props.blogItem.title,
-        blog_status: props.blogItem.blog_status,
-        featured_image_url: props.blogItem.featured_image_url
+        id,
+        title,
+        blog_status,
+        featured_image_url,
+        content,
+        apiUrl: `https://parkerstone.devcamp.space/portfolio/portfolio_blogs/${id}`,
+        apiAction: "patch"
       }))
     }
   }, [])
@@ -71,7 +76,13 @@ const BlogForm = props => {
   let featuredImageRef = React.createRef()
 
   const handleSubmit = event => {
-    axios.post("https://parkerstone.devcamp.space/portfolio/portfolio_blogs", buildForm(), {withCredentials: true})
+    // axios.post(formInfo.apiUrl, buildForm(), {withCredentials: true})
+    axios({
+      method: formInfo.apiAction,
+      url: formInfo.apiUrl,
+      data: buildForm(),
+      withCredentials: true
+    })
       .then(res => {
         if (formInfo.featured_image) {
           featuredImageRef.current.dropzone.removeAllFiles()
@@ -85,7 +96,11 @@ const BlogForm = props => {
           featured_image: ""
         })
 
-        props.handleSuccessfulFormSubmission(res.data.portfolio_blog)
+        if (props.editMode) {
+          props.handleUpdateFormSubmission(res.data.portfolio_blog)
+        } else {
+          props.handleSuccessfulFormSubmission(res.data.portfolio_blog)
+        }
       })
       .catch(err => {
         console.log("handleSubmit for blog error: ", err)

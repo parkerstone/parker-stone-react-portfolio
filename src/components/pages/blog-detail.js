@@ -11,8 +11,14 @@ const BlogDetail = props => {
   const [editMode, setEditMode] = useState(false)
 
   const handleEditClick = () => {
-    console.log("clicked!")
-    setEditMode(true)
+    if (props.loggedInStatus === "LOGGED_IN") {
+      setEditMode(true)
+    }
+  }
+
+  const handleUpdateFormSubmission = blog => {
+    setBlogItem(blog)
+    setEditMode(false)
   }
 
   const getBlogItem = () => {
@@ -31,7 +37,13 @@ const BlogDetail = props => {
 
   const contentManager = () => {
     if (editMode) {
-      return <BlogForm editMode={editMode} blogItem={blogItem} />
+      return (
+      <BlogForm
+        editMode={editMode}
+        blogItem={blogItem}
+        handleUpdateFormSubmission={handleUpdateFormSubmission}
+      />
+      )
     } else {
       return (
         <div className="content-container">
