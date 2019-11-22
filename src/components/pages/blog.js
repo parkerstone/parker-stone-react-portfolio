@@ -40,6 +40,19 @@ export default function(props) {
     setBlogItems(previousData => [blog].concat(previousData))
   }
 
+  const handleDeleteClick = (blogItem) => {
+    axios.delete(`https://api.devcamp.space/portfolio/portfolio_blogs/${blogItem.id}`, {withCredentials: true})
+    .then(res => {
+      setBlogItems(blogItems.filter(item => {
+        return item.id !== blogItem.id
+      }))
+      return res.data
+    })
+    .catch(err => {
+      console.log("Delete Error: ", err)
+    })
+  }
+
   // const activateInfiniteScroll = () => {
   //   window.onscroll = () => {
   //     if (isLoading || blogItems.length === totalCount) {
@@ -73,7 +86,18 @@ export default function(props) {
     }
   })
 
-  const blogRecords = blogItems.map(item => <BlogItem key={item.id} blogItem={item} />)
+  const blogRecords = blogItems.map(item => {
+    if(props.loggedInStatus === "LOGGED_IN") {
+      return (
+        <div className="admin-blog-wrapper" key={item.id}>
+          <BlogItem blogItem={item} />
+          <a onClick={() => handleDeleteClick(item)} className='icon'><FontAwesomeIcon icon="trash" /></a>
+        </div>
+      )
+    } else {
+        return <BlogItem key={item.id} blogItem={item} />
+    }
+  })
 
   return (
     <div className='blog-container'>

@@ -101,6 +101,21 @@
     flex-direction: column;
     width: 800px;
 
+    .admin-blog-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .icon {
+        margin-left: 15px;
+        cursor: pointer;
+
+        &:hover {
+          color: $warning;
+        }
+      }
+    }
+
     a {
       text-decoration: none;
       color: $teal;

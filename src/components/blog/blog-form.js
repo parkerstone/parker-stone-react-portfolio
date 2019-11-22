@@ -119,13 +119,15 @@ const BlogForm = props => {
           placeholder="Blog Title"
           value={formInfo.title}
         />
-        <input
+        <select
           onChange={handleChange}
-          type="text"
           name="blog_status"
-          placeholder="Blog Status"
           value={formInfo.blog_status}
-        />
+          className='select-element'
+        >
+          <option value='draft'>Draft</option>
+          <option value='published'>Published</option>
+        </select>
       </div>
 
       <div className="one-column">
