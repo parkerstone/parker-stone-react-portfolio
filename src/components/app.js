@@ -5,7 +5,6 @@ import {
   Route
 } from 'react-router-dom';
 import axios from 'axios';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import NavigationContainer from "./navigation/navigation-container";
 import Home from "./pages/home";
